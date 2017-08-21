@@ -10,7 +10,7 @@ const passport = require("passport");
 const User = require("./models/user");
 const config = require("./config");
 const { Strategy, ExtractJwt } = require("passport-jwt");
-const { ensureLoggedIn, ensureLoggedOut } = require('connect-ensure-login')
+const { ensureLoggedIn, ensureLoggedOut } = require("connect-ensure-login");
 
 mongoose.connect("mongodb://localhost/blog-lab", { useMongoClient: true });
 
@@ -42,7 +42,6 @@ const strategy = new Strategy(
   (payload, done) => {
     // payload is the object we encrypted at the route /api/token
     // We get the user id, make sure the user exist by looking it up
-    console.log('In Strategy')
     User.findById(payload.id).then(user => {
       if (user) {
         // make the user accessible in req.user
@@ -62,22 +61,27 @@ const authRoutes = require("./routes/auth");
 // We populate ourselves req.user because we don't want to
 // end up on an error when the authentication fails but rather
 // keep user empty
-app.use('/api', (req, res, next) => {
-  passport.authenticate("jwt", config.jwtSession, (err, user, fail) => {
-    req.user = user
-    next(err)
-  })(req, res, next)
-})
+app.use("/api", (req, res, next) => {
+  const authenticate = passport.authenticate(
+    "jwt",
+    config.jwtSession,
+    (err, user, fail) => {
+      req.user = user;
+      next(err);
+    }
+  );
+  authenticate(req, res, next);
+});
 
-app.use('/api/me', (req, res) => {
+app.get("/api/me", (req, res) => {
   if (req.user) {
-    res.json(req.user)
+    res.json(req.user);
   } else {
     res.json({
       message: "You're not connected"
-    })
+    });
   }
-})
+});
 
 app.use("/", index);
 app.use("/api", authRoutes);
@@ -105,7 +109,7 @@ app.get(
   ensureLoggedOut(),
   (req, res) => {
     // send the user his own information
-    res.json({ message: 'Go ahead' });
+    res.json({ message: "Go ahead" });
   }
 );
 
@@ -119,7 +123,7 @@ app.use((req, res, next) => {
 // error handler
 app.use((err, req, res, next) => {
   res.status(err.status || 500);
-  console.log(err)
+  console.log(err);
   // return the error message only in development mode
   res.json(req.app.get("env") === "development" ? err.message : {});
 });

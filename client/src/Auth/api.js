@@ -4,18 +4,13 @@ const auth = axios.create({
   baseURL: "http://localhost:3000/api"
 });
 
-function signup(username, password) {
-  return auth
-    .post("/signup", {
-      username,
-      password
-    })
-    .then(response => {
-      return response.data;
-    });
+function signup(user) {
+  return auth.post("/signup", user).then(response => {
+    return response.data;
+  });
 }
 
-function login(username, password) {
+function login(username, password, vm) {
   return auth
     .post("/login", {
       username,
@@ -23,14 +18,11 @@ function login(username, password) {
     })
     .then(response => {
       // tell axios to always use the token
-      axios.defaults.headers.common.Authorization =
-        "JWT " + response.data.token;
-      // save the token locally
-      localStorage.setItem("jwtToken", response.data.token);
+      const { token, name } = response.data;
+      localStorage.setItem("jwtToken", token);
+      localStorage.setItem("user.name", name);
+      loadUser(vm);
       return response.data;
-    })
-    .catch(err => {
-      throw new Error(err.response.data);
     });
 }
 
@@ -40,21 +32,29 @@ function secret() {
   });
 }
 
-// Retrieve the token from local storarge
-const token = localStorage.jwtToken;
-if (token) {
-  // tell axios to use the token
-  axios.defaults.headers.common.Authorization = "JWT " + token;
+function loadUser(vm) {
+  const token = localStorage.jwtToken;
+  const name = localStorage["user.name"];
+  if (token) {
+    // tell axios to use the token
+    axios.defaults.headers.common.Authorization = "Bearer " + token;
+    vm.$root.user = {
+      token,
+      name
+    };
+  }
 }
 
-function logout() {
+function logout(vm) {
   localStorage.removeItem("jwtToken");
   delete axios.defaults.headers.common.Authorization;
+  vm.$root.user = null;
 }
 
 export default {
   signup,
   login,
   logout,
-  secret
+  secret,
+  loadUser
 };

@@ -1,5 +1,9 @@
 <template>
   <div>
+    <article v-if="error" class="message is-danger">
+      <div class="message-body">{{ error }}</div>
+    </article>
+
     <div class="field">
       <label class="label">Username</label>
       <div class="control">
@@ -22,7 +26,6 @@
     </div>
 
     <pre>{{ response }}</pre>
-    <pre>{{ error }}</pre>
     <button @click="signup" class="button is-primary">Signup</button>
     <button @click="login" class="button is-success">Login</button>
     <button @click="logout" class="button is-danger">Logout</button>
@@ -44,12 +47,18 @@ export default {
   },
   methods: {
     signup() {
-      auth.signup(this.username, this.password).then((response) => {
+      this.error = ''
+      auth.signup({
+        username: this.username,
+        password: this.password
+      }).then((response) => {
         this.response = response
+      }).catch(err => {
+        this.error = err.response.data
       })
     },
     login() {
-      auth.login(this.username, this.password).then((response) => {
+      auth.login(this.username, this.password, this).then((response) => {
         this.response = response
       }).catch(err => {
         this.error = err
@@ -63,7 +72,7 @@ export default {
       })
     },
     logout() {
-      auth.logout()
+      auth.logout(this)
     }
   }
 }
