@@ -11,13 +11,13 @@ We first need to remove the line 3 on the `.gitignore` file (the line text is ju
 We cannot refer to `localhost` anymore in our src when we deploy. Open any `api.js` file you wrote and replace
 
 ```js
-baseUrl: "http://localhost:3000/api"
+baseURL: "http://localhost:3000/api"
 ```
 
 with
 
 ```js
-baseUrl: process.env.NODE_ENV === "production" ? '/api' : "http://localhost:3000/api"
+baseURL: process.env.NODE_ENV === "production" ? '/api' : "http://localhost:3000/api"
 ```
 
 Now, run `npm run build`. This will take some seconds, and, at the end, you will have a `dist` directory with some files inside.
