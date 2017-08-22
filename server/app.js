@@ -75,10 +75,12 @@ passport.use(new FacebookStrategy({
   console.log('accessToken', accessToken)
   console.log('refreshToken', refreshToken)
   console.log('profile', profile)
+  // check if the user is already created
   User.findOne({
     'facebook.id': profile.id
   }).then(user => {
     if (user) return done(null, user)
+    // Let's register as a new user
     user = new User({
       facebook: {
         id: profile.id,
@@ -94,10 +96,10 @@ passport.use(new FacebookStrategy({
 
     User.register(user, "We don't need a password", err => {
       if (err) {
-        // returns the error
         done(err, null)
+      } else {
+        done(null, user)
       }
-      done(null, user)
     });
   }).catch(err => done(err))
 }));
