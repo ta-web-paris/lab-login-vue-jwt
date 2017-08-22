@@ -69,6 +69,7 @@ passport.deserializeUser((user, done) => done(null, user))
 passport.use(new FacebookStrategy({
   clientID: process.env.FB_CLIENT_ID,
   clientSecret: process.env.FB_CLIENT_SECRET,
+  // TODO replace by real url in server
   callbackURL: "http://localhost:3000/api/login/facebook/callback"
 }, (accessToken, refreshToken, profile, done) => {
   console.log('Logging in with Facebook')

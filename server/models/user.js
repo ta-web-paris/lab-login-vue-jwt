@@ -9,7 +9,7 @@ const userSchema = new Schema({
   name: String,
   facebook: {
     id: String,
-    acessToken: String
+    accessToken: String
   }
 });
 

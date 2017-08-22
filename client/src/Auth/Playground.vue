@@ -28,6 +28,7 @@
     <pre>{{ response }}</pre>
     <button @click="signup" class="button is-primary">Signup</button>
     <button @click="login" class="button is-success">Login</button>
+    <a class="button" :href="facebookLogin">Facebook Login</a>
     <button @click="logout" class="button is-danger">Logout</button>
     <button @click="secret" class="button is-warning">Secret</button>
   </div>
@@ -36,6 +37,11 @@
 <script>
 import auth from './api'
 
+// Make sure the facebook login url is good in production and dev mode
+const facebookLogin = process.env.NODE_ENV === 'production'
+  ? '/api/login/facebook'
+  : 'http://localhost:3000/api/login/facebook'
+
 export default {
   data() {
     return {
@@ -43,7 +49,8 @@ export default {
       username: '',
       name: '',
       password: '',
-      error: ''
+      error: '',
+      facebookLogin
     }
   },
   methods: {

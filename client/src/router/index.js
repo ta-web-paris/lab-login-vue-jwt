@@ -15,9 +15,13 @@ export default new Router({
       component: Playground
     },
     {
+      path: "/login/callback",
+      component: LoginCallback
+    },
+    {
       path: "/login",
       name: "login",
       component: Login
-    }
+    },
   ]
 });

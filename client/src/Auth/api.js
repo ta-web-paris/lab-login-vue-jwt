@@ -26,6 +26,13 @@ function login(username, password, vm) {
     });
 }
 
+function loginFacebook(user, token, vm) {
+  // tell axios to always use the token
+  localStorage.setItem("jwtToken", token);
+  localStorage.setItem("user.name", user.name);
+  loadUser(vm);
+}
+
 function secret() {
   return auth.get("/secret").then(response => {
     return response.data;
@@ -54,6 +61,7 @@ function logout(vm) {
 export default {
   signup,
   login,
+  loginFacebook,
   logout,
   secret,
   loadUser

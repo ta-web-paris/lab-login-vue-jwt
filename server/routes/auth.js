@@ -73,6 +73,7 @@ router.post("/login", (req, res, next) => {
 router.get('/login/facebook', passport.authenticate('facebook'))
 router.get(
   '/login/facebook/callback',
+  // TODO failureredirect doesn't make sense here
   passport.authenticate('facebook', { failureRedirect: '/login' }),
   (req, res) => {
     const { user } = req
@@ -85,10 +86,9 @@ router.get(
     // for the client, this is just a token, he knows that
     // he has to send it
     const token = jwt.encode(payload, config.jwtSecret);
-    res.json({
-      token,
-      name: user.name
-    });
+    const baseURL = process.env.NODE_ENV === 'production' ? '' : 'http://localhost:8080'
+    // Redirect to client with the token and name
+    res.redirect(`${baseURL}/login/callback?token=${token}&name=${encodeURI(user.name)}`)
   }
 );
 
