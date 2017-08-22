@@ -1,0 +1,20 @@
+{
+  "name": "jwt-training",
+  "version": "1.0.0",
+  "description": "### Adding a public folder",
+  "main": "index.js",
+  "scripts": {
+    "start": { "postinstall": "cd server && npm install" }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ta-web-paris/lab-login-vue-jwt.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ta-web-paris/lab-login-vue-jwt/issues"
+  },
+  "homepage": "https://github.com/ta-web-paris/lab-login-vue-jwt#readme"
+}
