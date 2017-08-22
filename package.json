@@ -4,7 +4,7 @@
   "description": "### Adding a public folder",
   "main": "index.js",
   "scripts": {
-    "start": { "postinstall": "cd server && npm install" }
+    "start": "cd server && npm install && npm start"
   },
   "repository": {
     "type": "git",
