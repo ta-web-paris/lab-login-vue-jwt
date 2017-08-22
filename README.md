@@ -24,6 +24,8 @@ Now, run `npm run build`. This will take some seconds, and, at the end, you will
 
 Track them to git with `git add dist`
 
+Last but not least, we want to change the mode of the router. This has to be done in `router/index.js`, we need to add `mode: 'history'` to the object of options passed to `new Router({...})` alongside with `routes` array.
+
 #### Inside of `server`
 
 [Remember to setup the database](http://materials.ironhack.com/s/rk4YE5Jux#deploy-database)
