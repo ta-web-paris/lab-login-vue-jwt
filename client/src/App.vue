@@ -1,7 +1,9 @@
 <template>
   <section class="section" id="app">
+
     <router-link to="/login" v-if="!$root.user">Login</router-link>
     <p v-else>Hello {{ $root.user.name }}</p>
+
     <div class="container">
       <router-view></router-view>
     </div>
