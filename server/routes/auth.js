@@ -20,7 +20,8 @@ router.post("/signup", (req, res, next) => {
 
   User.register(user, password, err => {
     if (err) {
-      return next(err);
+      // returns the error
+      return res.status(400).json(err.message);
     }
     res.json({ success: true });
   });
