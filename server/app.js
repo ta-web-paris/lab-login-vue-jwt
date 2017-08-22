@@ -1,3 +1,4 @@
+require("dotenv").config();
 const express = require("express");
 const path = require("path");
 const favicon = require("serve-favicon");
@@ -5,6 +6,7 @@ const logger = require("morgan");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
 const cors = require("cors");
+const history = require('connect-history-api-fallback');
 
 const passport = require("passport");
 const User = require("./models/user");
@@ -12,7 +14,7 @@ const config = require("./config");
 const { Strategy, ExtractJwt } = require("passport-jwt");
 const { ensureLoggedIn, ensureLoggedOut } = require("connect-ensure-login");
 
-mongoose.connect("mongodb://localhost/blog-lab", { useMongoClient: true });
+mongoose.connect(process.env.MONGODB_URI, { useMongoClient: true });
 
 const app = express();
 
@@ -55,7 +57,6 @@ const strategy = new Strategy(
 // tell pasport to use it
 passport.use(strategy);
 
-const index = require("./routes/index");
 const authRoutes = require("./routes/auth");
 
 // We populate ourselves req.user because we don't want to
@@ -83,7 +84,6 @@ app.get("/api/me", (req, res) => {
   }
 });
 
-app.use("/", index);
 app.use("/api", authRoutes);
 
 // This is an example of protected route
@@ -112,6 +112,10 @@ app.get(
     res.json({ message: "Go ahead" });
   }
 );
+
+const clientRoot = path.join(__dirname, '../client/dist');
+app.use('/', express.static(clientRoot))
+app.use(history('index.html', { root: clientRoot }))
 
 // catch 404 and forward to error handler
 app.use((req, res, next) => {
