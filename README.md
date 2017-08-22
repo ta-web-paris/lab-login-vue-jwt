@@ -49,7 +49,7 @@ Now we need to tell express to handle the `dist` directory from `client`. To do 
     app.use('/', express.static(clientRoot))
     app.use(history('index.html', { root: clientRoot }))
     ```
-4. If you still have the `index` routes (`app.use("/", index)`), don't forget to remember it as well. If you added any routes to `routes/index.js`, move them to other files and always add them with `app.use('/api', myRoutes)`, so they get prefixed with `/api`
+4. If you still have the `index` routes (`app.use("/", index)`), don't forget to delete it as well. If you added any routes to `routes/index.js`, move them to other files and always add them with `app.use('/api', myRoutes)`, so they get prefixed with `/api`
 
 At this point, if your server is running, you should be able to visit `http://localhost:3000` and use the application 🎉
 
