@@ -1,5 +1,6 @@
 const express = require("express");
 const jwt = require("jwt-simple");
+const passport = require("passport");
 const router = express.Router();
 const User = require("../models/user");
 const config = require("../config");
@@ -68,5 +69,27 @@ router.post("/login", (req, res, next) => {
     res.status(401).json("username or password missing");
   }
 });
+
+router.get('/login/facebook', passport.authenticate('facebook'))
+router.get(
+  '/login/facebook/callback',
+  passport.authenticate('facebook', { failureRedirect: '/login' }),
+  (req, res) => {
+    const { user } = req
+    const payload = {
+      id: user.id
+    };
+    // generate a token and send it
+    // this token will contain the user.id encrypted
+    // only the server is able to decrypt it
+    // for the client, this is just a token, he knows that
+    // he has to send it
+    const token = jwt.encode(payload, config.jwtSecret);
+    res.json({
+      token,
+      name: user.name
+    });
+  }
+);
 
 module.exports = router;

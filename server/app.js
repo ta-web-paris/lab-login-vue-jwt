@@ -12,6 +12,7 @@ const passport = require("passport");
 const User = require("./models/user");
 const config = require("./config");
 const { Strategy, ExtractJwt } = require("passport-jwt");
+const FacebookStrategy = require('passport-facebook').Strategy
 const { ensureLoggedIn, ensureLoggedOut } = require("connect-ensure-login");
 
 mongoose.connect(process.env.MONGODB_URI, { useMongoClient: true });
@@ -23,13 +24,18 @@ const app = express();
 app.use(logger("dev"));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
-app.use(
-  cors({
-    origin: "http://localhost:8080"
-  })
-);
 
-passport.initialize();
+// We don't need cors on production because there we only have 1 server
+if (process.env.NODE_ENV !== 'production') {
+  app.use(
+    cors({
+      // Only allow the vue application access this server
+      origin: "http://localhost:8080"
+    })
+  );
+}
+
+app.use(passport.initialize());
 // Create the strategy for JWT
 const strategy = new Strategy(
   {
@@ -56,6 +62,45 @@ const strategy = new Strategy(
 );
 // tell pasport to use it
 passport.use(strategy);
+
+passport.serializeUser((user, done) => done(null, user))
+passport.deserializeUser((user, done) => done(null, user))
+
+passport.use(new FacebookStrategy({
+  clientID: process.env.FB_CLIENT_ID,
+  clientSecret: process.env.FB_CLIENT_SECRET,
+  callbackURL: "http://localhost:3000/api/login/facebook/callback"
+}, (accessToken, refreshToken, profile, done) => {
+  console.log('Logging in with Facebook')
+  console.log('accessToken', accessToken)
+  console.log('refreshToken', refreshToken)
+  console.log('profile', profile)
+  User.findOne({
+    'facebook.id': profile.id
+  }).then(user => {
+    if (user) return done(null, user)
+    user = new User({
+      facebook: {
+        id: profile.id,
+        // the accessToken is needed if you want to access extra information on the user
+        // In that case we may want to store it
+        // we could save more information if we want to
+        accessToken
+      },
+      // make up an username because we need it
+      username: `fb__${profile.id}`,
+      name: profile.displayName
+    });
+
+    User.register(user, "We don't need a password", err => {
+      if (err) {
+        // returns the error
+        done(err, null)
+      }
+      done(null, user)
+    });
+  }).catch(err => done(err))
+}));
 
 const authRoutes = require("./routes/auth");
 
