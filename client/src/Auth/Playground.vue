@@ -14,7 +14,7 @@
     <div class="field">
       <label class="label">Name</label>
       <div class="control">
-        <input class="input" type="text">
+        <input class="input" v-model="name" type="text">
       </div>
     </div>
 
@@ -41,6 +41,7 @@ export default {
     return {
       response: '',
       username: '',
+      name: '',
       password: '',
       error: ''
     }
@@ -50,7 +51,8 @@ export default {
       this.error = ''
       auth.signup({
         username: this.username,
-        password: this.password
+        password: this.password,
+        name: this.name
       }).then((response) => {
         this.response = response
       }).catch(err => {
