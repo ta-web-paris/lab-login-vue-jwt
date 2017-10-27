@@ -67,6 +67,12 @@ and replace the line 7 with
  "postinstall": "cd server && npm install",
  "start": "cd server && npm start"
 ```
+Finally, track it with git:
+
+```sh
+git add package.json
+git commit -m 'Add package.json file at root'
+```
 
 This will tell Heroku to use the `server` folder as the project
 
