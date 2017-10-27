@@ -6,7 +6,7 @@ const logger = require("morgan");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
 const cors = require("cors");
-const history = require('connect-history-api-fallback');
+const history = require('express-history-api-fallback');
 
 const passport = require("passport");
 const User = require("./models/user");

@@ -39,10 +39,10 @@ Here's a small summary of what you need:
 5. Add `require("dotenv").config()` at the very top of `app.js`
 6. Use the `MONGODB_URI` by replacing your previous `mongoose.connect`: `mongoose.connect(process.env.MONGODB_URI, { useMongoClient: true })`
 
-Now we need to tell express to handle the `dist` directory from `client`. To do that we're going to use [connect-history-api-fallback](https://github.com/bripkens/connect-history-api-fallback)
+Now we need to tell express to handle the `dist` directory from `client`. To do that we're going to use [express-history-api-fallback](https://gitlab.com/sebdeckers/express-history-api-fallback)
 
-1. Install it: `npm install --save connect-history-api-fallback`
-2. Require it in `app.js` (`const history = require('connect-history-api-fallback')`)
+1. Install it: `npm install --save express-history-api-fallback`
+2. Require it in `app.js` (`const history = require('express-history-api-fallback')`)
 3. Use it **after** all the other routes, just before the 404 handler:
     ```js
     const clientRoot = path.join(__dirname, '../client/dist');
