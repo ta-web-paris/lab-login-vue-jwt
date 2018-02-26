@@ -20,6 +20,12 @@ with
 baseURL: process.env.NODE_ENV === "production" ? '/api' : "http://localhost:3000/api"
 ```
 
+Finally, set `NODE_ENV` to production before building by modifying your client `package.json` file, `scripts` section:
+
+```json
+"build": "NODE_ENV=production vue-cli-service build"
+```
+
 Now, run `npm run build`. This will take some seconds, and, at the end, you will have a `dist` directory with some files inside.
 
 Track them to git with `git add dist`
