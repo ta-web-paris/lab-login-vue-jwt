@@ -88,7 +88,7 @@ Now you're ready to deploy to Heroku. You'll have to create an app, as we did be
 
 1. `heroku git:remote -a lab-vue-jwt`
 2. Build your client app: `cd client && npm run build`
-3. Tell git to track changes in `dist` folder with `git add dist`. ⚠ **you will have to do step 2 to 4 every time you deploy a new version**
+3. Tell git to track changes in `dist` folder with `git add dist`. ⚠ **you will have to do step 2 to 5 every time you deploy a new version**
 4. Commit `git commit -m deploy`
 5. Deploy to Heroku `git push heroku master` 🎉
 
